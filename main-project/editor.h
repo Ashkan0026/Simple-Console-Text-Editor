@@ -149,6 +149,9 @@ namespace editor_obj
 		/// <param name="x">The x coordinate</param>
 		/// <param name="y">The specified line</param>
 		void GoToNextLine(int& x, int& y);
+
+
+		void DeleteTheChar(int& y, int& x);
 	private:
 		// the lines here
 		std::vector<Line*> lines;

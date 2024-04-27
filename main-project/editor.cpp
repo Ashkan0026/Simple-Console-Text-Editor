@@ -119,6 +119,12 @@ void Editor::MainLoop() {
 			y++;
 			x = 0;
 		}
+		else if (state == KeyState::BACKSPACE) {
+			DeleteTheChar(y, x);
+			ClearConsole();
+			PrintAllTheLines();
+			ArrowLeftPressed(x, y, lines[y]->GetLineLimit(), lines.size());
+		}
 		else if (state == KeyState::REGULAR) {
 			bool val = AddCharacterToLine(ch, y, x);
 			if (val) {
@@ -171,14 +177,14 @@ void editor_obj::Editor::ArrowUpPressed(int& y, int& x, int line_limit) {
 	}
 	else {
 		y--;
-		x = lines[y]->GetLineLimit();
+		x = x < lines[y]->GetLineLimit() ? x : lines[y]->GetLineLimit();
 	}
 }
 
 void editor_obj::Editor::ArrowDownPressed(int& y, int& x, int line_limit) {
 	if (y < line_limit - 1) {
 		y++;
-		x = lines[y]->GetLineLimit();
+		x = x < lines[y]->GetLineLimit() ? x : lines[y]->GetLineLimit();
 	}
 	else {
 		// nothing
@@ -216,4 +222,11 @@ void editor_obj::Editor::GoToNextLine(int& x, int& y) {
 	std::vector<char> overs = lines[y]->GetTheOvers(x + 1);
 	new_line->InsertAtBeginning(overs);
 	lines.insert(lines.begin() + y + 1, new_line);
+}
+
+void editor_obj::Editor::DeleteTheChar(int& y, int& x) {
+	while (!lines[y]->DeleteFromLine(x - 1) && y >= 0) {
+		y--;
+		x = lines[y]->GetLineLimit();
+	}
 }

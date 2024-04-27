@@ -30,6 +30,8 @@ keyboard_input::KeyState keyboard_input::SetTheKeyState(int ch) {
 		return keyboard_input::KeyState::IGNORE_CASE;
 	case 13:
 		return keyboard_input::KeyState::NEXT_LINE;
+	case 8:
+		return keyboard_input::KeyState::BACKSPACE;
 	default:
 		return keyboard_input::KeyState::REGULAR;
 	}

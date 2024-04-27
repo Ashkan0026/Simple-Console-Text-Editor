@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "../Editor/editor.h"
+#include "../Editor/file.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -22,7 +23,7 @@ namespace EditorTest
 			return true;
 		}
 
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(LineMethodsTests)
 		{
 			using namespace editor_obj;
 			/// Line Tests
@@ -62,7 +63,33 @@ namespace EditorTest
 			line.DeleteFromLine(3);
 			line.DeleteFromLine(3);
 			expected = { 'd', 'a', 'v', 'd', 'a', 'v', 'i', 'd', 'o', 's', 'a', '%', '4', '#' };
-			Assert::AreEqual(true, CheckIfEqual(line.GetTheContent(), expected));
+			std::vector<char> lines_content = line.GetTheContent();
+			Assert::AreEqual(true, CheckIfEqual(lines_content, expected));
+		}
+
+		TEST_METHOD(FileTestMethods) {
+
+			/// Testing the file reading
+			std::string file_path = "C:\\Users\\Ashkan\\Documents\\keykavous.txt";
+			std::vector<char> expected = {'T', 'h', 'e', 'L', 'a', 's', 't'};
+			std::ofstream output(file_path);
+			size_t buffer_length = expected.size();
+			char* buffer = new char[buffer_length];
+			ZeroMemory(buffer, buffer_length);
+			for (int i = 0; i < buffer_length; i++) {
+				buffer[i] = expected[i];
+			}
+			output.write(buffer, buffer_length);
+			output.close();
+			delete[] buffer;
+
+			FileInfo info = FileInfo(file_path, true, false);
+			bool opened = info.OpenTheFile();
+			std::vector<char> result = info.ReadTheFile();
+			bool equal = CheckIfEqual(result, expected);
+			std::remove(file_path.c_str());
+			Assert::AreEqual(true, equal);
+			
 		}
 	};
 }

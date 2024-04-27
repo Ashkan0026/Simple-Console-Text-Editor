@@ -2,6 +2,8 @@
 #include "editor.h"
 #include "screen.h"
 #include "input.h"
+#include "file.h"
+#include <filesystem>
 
 using namespace editor_obj;
 using namespace screen_related;
@@ -17,8 +19,10 @@ void PrintVector(std::vector<char> list, std::string msg) {
 
 int main() {
 	
-	Editor editor = Editor();
+	/*Editor editor = Editor();
 	editor.InitializeFirstLine();
 	editor.MainLoop();
-	
+	int ch = _getch();
+	std::cout << ch << '\n';*/
+	std::filesystem::remove("C:\\Users\\Ashkan\\Documents\\keykavous.txt");
 }
