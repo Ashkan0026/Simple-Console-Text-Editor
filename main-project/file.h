@@ -1,6 +1,6 @@
 #include <Windows.h>
-#include <iostream>
 #include <vector>
+#include <string>
 
 #define BUFFER_LENGTH 512
 

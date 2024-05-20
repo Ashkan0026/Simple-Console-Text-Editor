@@ -4,13 +4,14 @@ bool FileInfo::OpenTheFile() {
 	DWORD share_mode = 0, create_disposition = 0, access = 0, attribute = 0;
 	if (read) {
 		share_mode |= FILE_SHARE_READ;
-		access = GENERIC_READ;
+		access |= GENERIC_READ;
+		create_disposition = OPEN_EXISTING;
 	}
 	if (write) {
 		share_mode |= FILE_SHARE_WRITE;
-		access = GENERIC_WRITE;
+		access |= GENERIC_WRITE;
+		create_disposition = OPEN_ALWAYS;
 	}
-	create_disposition = OPEN_ALWAYS;
 	attribute = FILE_ATTRIBUTE_NORMAL;
 	// Creating the file with the specified flags;
 	file_handle = CreateFileA(file_name.c_str(), access, share_mode, NULL, create_disposition, attribute, NULL);
@@ -23,7 +24,7 @@ bool FileInfo::OpenTheFile() {
 }
 
 std::vector<char> FileInfo::ReadTheFile() {
-	if (!IsFileOpen()) {
+	if (!IsFileOpen() || !this->read) {
 		return {};
 	}
 	char buffer[BUFFER_LENGTH];
@@ -65,6 +66,6 @@ bool FileInfo::WriteToFile(std::vector<char>& content) {
 		return res;
 	}
 	else {
-		std::cout << "This operation is impossible" << '\n';
+		return false;
 	}
 }

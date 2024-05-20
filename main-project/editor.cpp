@@ -1,6 +1,7 @@
 #include "editor.h"
 #include "screen.h"
 #include "input.h"
+#include "file.h"
 
 using namespace editor_obj;
 using namespace screen_related;
@@ -16,7 +17,7 @@ int Line::GetLineNumber() {
 }
 
 bool Line::DeleteFromLine(int x) {
-	if (x > 0) {
+	if (x >= 0) {
 		this->line_contents.erase(line_contents.begin() + x);
 		return true;
 	}
@@ -118,6 +119,9 @@ void Editor::MainLoop() {
 			PrintAllTheLines();
 			y++;
 			x = 0;
+		}
+		else if (state == KeyState::SAVE) {
+			SaveToFile(this->file_name);
 		}
 		else if (state == KeyState::BACKSPACE) {
 			DeleteTheChar(y, x);
@@ -225,8 +229,30 @@ void editor_obj::Editor::GoToNextLine(int& x, int& y) {
 }
 
 void editor_obj::Editor::DeleteTheChar(int& y, int& x) {
-	while (!lines[y]->DeleteFromLine(x - 1) && y >= 0) {
+	while (y >= 0 && !lines[y]->DeleteFromLine(x - 1)) {
 		y--;
+		if (y < 0) {
+			y = 0;
+			break;
+		}
 		x = lines[y]->GetLineLimit();
 	}
+}
+
+bool editor_obj::Editor::SaveToFile(std::string file_name) {
+	FileInfo file = FileInfo(file_name, 1, 1);
+	bool opening = file.OpenTheFile();
+	if (!opening) {
+		return false;
+	}
+	for (int i = 0; i < lines.size(); i++) {
+		std::vector<char> new_arr = lines[i]->GetTheContent();
+		new_arr.push_back('\n');
+		bool res = file.WriteToFile(new_arr);
+		if (!res) {
+			return false;
+		}
+	}
+	file.Close();
+	return true;
 }

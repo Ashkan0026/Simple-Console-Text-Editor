@@ -1,13 +1,8 @@
 #include <iostream>
 #include "editor.h"
-#include "screen.h"
-#include "input.h"
-#include "file.h"
-#include <filesystem>
+#include <conio.h>
 
 using namespace editor_obj;
-using namespace screen_related;
-using namespace keyboard_input;
 
 void PrintVector(std::vector<char> list, std::string msg) {
 	std::cout << msg;
@@ -17,12 +12,15 @@ void PrintVector(std::vector<char> list, std::string msg) {
 	std::cout << '\n';
 }
 
-int main() {
-	
-	/*Editor editor = Editor();
+int main(char* argv[], int argc) {
+
+	/*if (argc < 1) {
+		std::cout << "Incorrect command" << '\n';
+		return 1;
+	}*/
+	/*std::string file_name = "C:\\Users\\Ashkan\\Documents\\keykavousian.txt";
+	Editor editor = Editor(file_name);
 	editor.InitializeFirstLine();
-	editor.MainLoop();
-	int ch = _getch();
-	std::cout << ch << '\n';*/
-	std::filesystem::remove("C:\\Users\\Ashkan\\Documents\\keykavous.txt");
+	editor.MainLoop();*/
+	
 }

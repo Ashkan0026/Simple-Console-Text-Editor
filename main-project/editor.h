@@ -1,9 +1,17 @@
 #pragma once
 #include <vector>
-#include <conio.h>
+#include <iostream>
 
 namespace editor_obj
 {
+	typedef struct _SelectArea
+	{
+		int start_x;
+		int start_y;
+		int end_x;
+		int end_y;
+	} SelectArea;
+
 	class Line
 	{
 	public:
@@ -90,14 +98,16 @@ namespace editor_obj
 	{
 	public:
 
-		Editor(int number_of_lines) {
+		Editor(int number_of_lines, std::string filename) {
 			this->number_of_lines = number_of_lines;
 			this->line_counter = 0;
+			this->file_name = filename;
 		}
 
-		Editor() {
+		Editor(std::string filename) {
 			this->number_of_lines = 1;
 			this->line_counter = 0;
+			this->file_name = filename;
 		}
 		
 		/// <summary>
@@ -152,6 +162,13 @@ namespace editor_obj
 
 
 		void DeleteTheChar(int& y, int& x);
+
+		/// <summary>
+		/// Saving the contents to the specified file
+		/// </summary>
+		/// <returns>true if the file was saved successfully</returns>
+		bool SaveToFile(std::string file_name);
+
 	private:
 		// the lines here
 		std::vector<Line*> lines;
@@ -161,5 +178,14 @@ namespace editor_obj
 		/// When we try to add newLine this will work
 		/// </summary>
 		int line_counter;
+		/// <summary>
+		/// The file that the contents are going to be saved
+		/// </summary>
+		std::string file_name;
+
+		/// <summary>
+		/// The select area where the user types
+		/// </summary>
+		SelectArea select_area;
 	};
 }

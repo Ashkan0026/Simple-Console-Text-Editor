@@ -37,3 +37,35 @@ void screen_related::PrintTheLine(Line* line) {
 		std::cout << contents[i];
 	}
 }
+
+void screen_related::CleanTheLine(int y, int line_limit) {
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	SMALL_RECT rect;
+	COORD scroll_target;
+	CHAR_INFO fill;
+
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	if (!GetConsoleScreenBufferInfo(hConsole, &csbi)) {
+		return;
+	}
+
+	rect.Left = 0;
+	rect.Top = 0;
+	rect.Right = line_limit;
+	rect.Bottom = 0;
+	
+	scroll_target.X = line_limit;
+	scroll_target.Y = 0;
+	
+	fill.Char.AsciiChar = '\0';
+	fill.Attributes = csbi.wAttributes;
+
+	ScrollConsoleScreenBufferA(hConsole, &rect, NULL, scroll_target, &fill);
+
+	csbi.dwCursorPosition.X = 0;
+	csbi.dwCursorPosition.Y = 0;
+
+	SetConsoleCursorPosition(hConsole, csbi.dwCursorPosition);
+
+}

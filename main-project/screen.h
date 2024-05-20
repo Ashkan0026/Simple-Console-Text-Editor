@@ -1,7 +1,7 @@
 #pragma once
 #include <Windows.h>
-#include "editor.h"
 #include <iostream>
+#include "editor.h"
 
 using namespace editor_obj;
 
@@ -28,7 +28,7 @@ namespace screen_related
 	void PrintTheLine(Line* line);
 
 	// Go To the Next Window
-	void NextWindow(Editor& editor);
+	//void NextWindow(Editor& editor);
 
 	/// <summary>
 	/// Get the maximum width
@@ -48,4 +48,11 @@ namespace screen_related
 	/// <param name="x">The column</param>
 	/// <param name="y">The row</param>
 	void SetConsolePosition(int x, int y);
+
+	/// <summary>
+	/// Clean the specified line
+	/// </summary>
+	/// <param name="y">The line number to delete</param>
+	/// <param name="line_length"> The length of the line </param>
+	void CleanTheLine(int y, int line_length);
 }

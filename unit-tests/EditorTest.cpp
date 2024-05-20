@@ -67,7 +67,7 @@ namespace EditorTest
 			Assert::AreEqual(true, CheckIfEqual(lines_content, expected));
 		}
 
-		TEST_METHOD(FileTestMethods) {
+		TEST_METHOD(ReadTestMethods) {
 
 			/// Testing the file reading
 			std::string file_path = "C:\\Users\\Ashkan\\Documents\\keykavous.txt";
@@ -84,12 +84,41 @@ namespace EditorTest
 			delete[] buffer;
 
 			FileInfo info = FileInfo(file_path, true, false);
-			bool opened = info.OpenTheFile();
+			info.OpenTheFile();
 			std::vector<char> result = info.ReadTheFile();
 			bool equal = CheckIfEqual(result, expected);
 			std::remove(file_path.c_str());
 			Assert::AreEqual(true, equal);
-			
+		}
+
+		TEST_METHOD(WriteTestMethods) 
+		{
+			/// Testing the Write method
+			std::vector<char> expected = { 'j', 'y', 't', 'q', 'p', '3', '2', 'N', 'O', '-', '_' };
+			std::string file_path = "C:\\Users\\Ashkan\\Documents\\abosofian.txt";
+			FileInfo file_info = FileInfo(file_path, true, true);
+			bool open = file_info.OpenTheFile();
+			if (!open) {
+				Assert::AreEqual(false, true);
+				return;
+			}
+			file_info.WriteToFile(expected);
+
+			//Read the written file
+			std::ifstream reader(file_path);
+			if (!reader) {
+				Assert::AreEqual(false, true);
+				return;
+			}
+			size_t buffer_length = expected.size();
+			char* buffer = new char[buffer_length];
+			reader.read(buffer, buffer_length);
+			std::vector<char> result(buffer_length);
+			for (int i = 0; i < buffer_length; i++) {
+				result[i] = buffer[i];
+			}
+			delete[] buffer;
+			Assert::AreEqual(true, CheckIfEqual(result, expected));
 		}
 	};
 }
